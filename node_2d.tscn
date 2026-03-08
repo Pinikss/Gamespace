@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://4pqund3nukl7"]
+
+[ext_resource type="Texture2D" uid="uid://b46yieeicoqia" path="res://Asset 1.png" id="1_wtcfe"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0e48y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epypp"]
+size = Vector2(1198, 20)
+
+[sub_resource type="GDScript" id="GDScript_y32ns"]
+script/source = "extends CharacterBody2D
+
+const SPEED = 150.0
+
+func _physics_process(delta: float) -> void:
+	
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+	
+	var direction := Input.get_axis(\"left\", \"right\")
+	if direction:
+		velocity.x = lerp(velocity.x, direction*SPEED, 0.02)
+	else:
+		velocity.x = lerp(velocity.x, 0.0, 0.02)
+
+	move_and_slide()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y32ns"]
+size = Vector2(195, 80)
+
+[node name="Node2D" type="Node2D" unique_id=737446355]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=60185333]
+position = Vector2(575, 451)
+physics_material_override = SubResource("PhysicsMaterial_0e48y")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1297542418]
+shape = SubResource("RectangleShape2D_epypp")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=2119325938]
+position = Vector2(575, 317)
+script = SubResource("GDScript_y32ns")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1476691318]
+shape = SubResource("RectangleShape2D_y32ns")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=2028187397]
+scale = Vector2(0.4009901, 0.4009901)
+texture = ExtResource("1_wtcfe")
