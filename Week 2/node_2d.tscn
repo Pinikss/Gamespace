@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://b6f1etmyowjes"]
+
+[ext_resource type="Script" uid="uid://1ifgsv7bidpe" path="res://lift.gd" id="1_0hol4"]
+[ext_resource type="Texture2D" uid="uid://dag671csmtcr3" path="res://icon.svg" id="2_q6r6c"]
+[ext_resource type="Script" uid="uid://bucko7x833dcd" path="res://area_2d.gd" id="3_kdubu"]
+[ext_resource type="Script" uid="uid://kvmwvwcqejcx" path="res://character_body_2d.gd" id="4_d21ai"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0hol4"]
+size = Vector2(130, 450)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q6r6c"]
+size = Vector2(130, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q6r6c"]
+radius = 100.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rj586"]
+size = Vector2(130, 130)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kdubu"]
+size = Vector2(1200, 20)
+
+[node name="Node2D" type="Node2D" unique_id=590786741]
+
+[node name="Lift" type="Node2D" parent="." unique_id=295527914]
+position = Vector2(600, 555)
+script = ExtResource("1_0hol4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Lift" unique_id=1732801011]
+position = Vector2(0, -215)
+shape = SubResource("RectangleShape2D_0hol4")
+
+[node name="Platform" type="Node2D" parent="Lift" unique_id=1979838072]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Lift/Platform" unique_id=135708888]
+shape = SubResource("RectangleShape2D_q6r6c")
+
+[node name="Sprite2D" type="Sprite2D" parent="Lift/Platform" unique_id=62173362]
+scale = Vector2(1.015, 0.16)
+texture = ExtResource("2_q6r6c")
+
+[node name="Remote" type="Area2D" parent="." unique_id=379031766]
+position = Vector2(223, 555)
+script = ExtResource("3_kdubu")
+lift_path = NodePath("../Lift")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Remote" unique_id=1753443419]
+shape = SubResource("CircleShape2D_q6r6c")
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=135103458]
+script = ExtResource("4_d21ai")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=984396350]
+shape = SubResource("RectangleShape2D_rj586")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=19775201]
+texture = ExtResource("2_q6r6c")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2021151458]
+position = Vector2(573, 555)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=147279047]
+shape = SubResource("RectangleShape2D_kdubu")
+
+[connection signal="body_entered" from="Remote" to="Remote" method="_on_body_entered"]
+[connection signal="body_exited" from="Remote" to="Remote" method="_on_body_exited"]
