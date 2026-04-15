@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://4pqund3nukl7"]
+
+[ext_resource type="Texture2D" uid="uid://b46yieeicoqia" path="res://Asset 1.png" id="1_wtcfe"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0e48y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epypp"]
+size = Vector2(1198, 20)
+
+[sub_resource type="GDScript" id="GDScript_y32ns"]
+script/source = "extends CharacterBody2D
+const PELURU_SCENE = preload(\"res://peluru.tscn\")
+
+@onready var sprite = $Sprite2D
+@onready var moncong = $Node2D
+@onready var shoot_timer = $ShootTimer
+@export var recoil_strength = 100.0
+
+var facing_direction = 1
+const SPEED = 200.0
+
+
+func _physics_process(delta: float) -> void:
+	
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+	
+	var direction := Input.get_axis(\"left\", \"right\")
+	if direction:
+		velocity.x = lerp(velocity.x, direction*SPEED, 0.007)
+		facing_direction = sign(direction)
+	else:
+		velocity.x = lerp(velocity.x, 0.0, 0.015)
+	
+	if facing_direction == 1:
+		sprite.flip_h = true 
+		moncong.position.x = abs(moncong.position.x) 
+	elif facing_direction == -1:
+		sprite.flip_h = false
+		moncong.position.x = -abs(moncong.position.x)
+	
+	if Input.is_action_just_pressed(\"shoot\") and shoot_timer.is_stopped():
+		shoot()
+		shoot_timer.start()
+
+	move_and_slide()
+
+
+func shoot():
+	
+	var peluru = PELURU_SCENE.instantiate()
+	
+	peluru.global_position = moncong.global_position
+	
+	if facing_direction == 1:
+		peluru.direction = Vector2.RIGHT
+	else:
+		peluru.direction = Vector2.LEFT
+	
+	get_tree().current_scene.add_child(peluru)
+	
+	velocity.x -= facing_direction * recoil_strength
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y32ns"]
+size = Vector2(195, 80)
+
+[node name="Node2D" type="Node2D" unique_id=737446355]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=60185333]
+position = Vector2(575, 451)
+physics_material_override = SubResource("PhysicsMaterial_0e48y")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1297542418]
+shape = SubResource("RectangleShape2D_epypp")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=2119325938]
+position = Vector2(575, 317)
+script = SubResource("GDScript_y32ns")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1476691318]
+shape = SubResource("RectangleShape2D_y32ns")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=2028187397]
+scale = Vector2(0.4009901, 0.4009901)
+texture = ExtResource("1_wtcfe")
+
+[node name="Node2D" type="Node2D" parent="CharacterBody2D" unique_id=2094217776]
+position = Vector2(-96.00001, -14)
+
+[node name="ShootTimer" type="Timer" parent="CharacterBody2D" unique_id=1955832213]
+wait_time = 2.0
+one_shot = true

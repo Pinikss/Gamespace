@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dmnka3qgy760c"]
+
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="1_gp46o"]
+
+[sub_resource type="GDScript" id="GDScript_3kq1s"]
+script/source = "extends Area2D
+
+@export var speed = 500.0
+var direction = Vector2.RIGHT
+
+func _ready():
+	rotation = direction.angle()
+
+func _physics_process(delta):
+	position += direction * speed * delta
+
+func _on_visible_on_screen_notifier_2d_screen_exited():
+	queue_free() # Hemat memori
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_epypp"]
+
+[node name="Peluru" type="Area2D" unique_id=1173357957]
+script = SubResource("GDScript_3kq1s")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1888802501]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_gp46o")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1578429434]
+shape = SubResource("CircleShape2D_epypp")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=775890021]
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
