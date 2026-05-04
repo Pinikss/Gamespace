@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://4pqund3nukl7"]
+
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="1_epypp"]
+[ext_resource type="PackedScene" uid="uid://cboa3oftv5d6o" path="res://tank.tscn" id="2_0e48y"]
+[ext_resource type="PackedScene" uid="uid://dqmryqwubker7" path="res://granadier.tscn" id="2_epypp"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0e48y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epypp"]
+size = Vector2(1198, 20)
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_epypp"]
+vertices = PackedVector2Array(1179.8281, 76.85156, 1170.1484, 669.1094, 25.929688, 682.8672, 22.0625, 60.140625)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(1266, 668, 1265, 58, 12, 50, 16, 693)])
+
+[node name="Node2D" type="Node2D" unique_id=737446355]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=60185333]
+position = Vector2(636, 546)
+collision_layer = 7
+collision_mask = 7
+physics_material_override = SubResource("PhysicsMaterial_0e48y")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1297542418]
+shape = SubResource("RectangleShape2D_epypp")
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=2076305304]
+visible = false
+scale = Vector2(9.296875, 0.359375)
+texture = ExtResource("1_epypp")
+
+[node name="Player" parent="." unique_id=1771104937 groups=["Player"] instance=ExtResource("2_0e48y")]
+position = Vector2(192, 474)
+
+[node name="Granadier" parent="." unique_id=1949196074 instance=ExtResource("2_epypp")]
+position = Vector2(1201, 496)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1321955632]
+navigation_polygon = SubResource("NavigationPolygon_epypp")
